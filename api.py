@@ -256,3 +256,18 @@ def logs(limit: int = 20):
         return {"logs": entries, "total": len(files)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/logs/{filename}")
+def log_detail(filename: str):
+    # Sanitise — only allow alphanumeric, underscore, hyphen, dot
+    import re
+    if not re.match(r'^[\w\-\.]+\.json$', filename):
+        raise HTTPException(status_code=400, detail="Invalid filename")
+    log_file = LOG_DIR / filename
+    if not log_file.exists():
+        raise HTTPException(status_code=404, detail="Log not found")
+    try:
+        return json.loads(log_file.read_text())
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
