@@ -217,3 +217,9 @@ __marimo__/
 
 # Cache
 **/data_cache/
+
+# Local trade logs and test artifacts
+trade_logs/
+test_*.py
+api_startup*.log
+backend_test*.log
